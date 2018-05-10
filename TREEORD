@@ -1,0 +1,113 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.*;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Lincon
+ */
+public class test {
+
+	static class No{
+		int data;
+		No left, right;		
+		public No(int data) {
+			this.data = data;
+			left = null;
+			right = null;
+		}
+	}
+	
+	static class Tree{
+		private String posStr = "";
+		private static int preIndex = 0;
+		
+		private No criarTree(String in[], String pre[], int inicio, int fim) 
+	    {
+	        if (inicio > fim){
+                    return null;
+                }
+	        
+	        int valor = Integer.parseInt(pre[preIndex++]);
+	        No tNo = new No(valor);
+	 
+	        if (inicio == fim){
+                    return tNo;
+                }
+	  
+	        int index = psq(in, inicio, fim, tNo.data);
+	  
+	        tNo.left = criarTree(in, pre, inicio, index - 1);
+	        tNo.right = criarTree(in, pre, index + 1, fim);
+	  
+	        return tNo;
+	    }
+		
+		private int psq(String array[], int inc, int fm, int data) 
+	    {
+	        int i;
+	        for (i = inc; i <= fm; i++) 
+	        {
+	        	int v = Integer.parseInt(array[i]);
+	            if( v == data){
+                        return i;
+                    }
+	        }
+	        return i;
+	    }
+		
+		private void posOrdemTree(No no) 
+	    {
+	        if (no == null){
+                    return;
+                }
+
+	        posOrdemTree(no.left);
+	        posOrdemTree(no.right);
+
+	        posStr += no.data + " ";
+	    }
+		
+		private String equalsStr() {
+			return posStr;
+		}
+		
+	}
+	
+	public static void main(String[] args) throws Exception{
+		Tree tree = new Tree();
+		
+		BufferedReader l = new BufferedReader(new InputStreamReader(System.in));
+                
+		int size = Integer.parseInt(l.readLine());
+                
+		String pre = l.readLine();
+		String preOrdem[] = pre.split(" ");		
+		String pos = l.readLine();		
+		String inOr = l.readLine();
+		String inOrdem[] = inOr.split(" ");
+		No root = tree.criarTree(inOrdem, preOrdem, 0, (size-1));		
+		tree.posOrdemTree(root);		
+		String posTree = tree.equalsStr();
+		String posString = posTree.substring(0, posTree.length() - 1);		
+		if(pos.equals(posString)){
+                    System.out.println("yes");
+                }			
+                else{
+                    System.out.println("no");
+                }
+
+	}
+	
+
+}
+
+
